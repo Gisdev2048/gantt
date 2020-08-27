@@ -29,11 +29,20 @@ export default class Bar {
         this.duration =
             date_utils.diff(this.task._end, this.task._start, 'hour') /
             this.gantt.options.step;
-        this.width = this.gantt.options.column_width * this.duration;
-        this.progress_width =
-            this.gantt.options.column_width *
-                this.duration *
-                (this.task.progress / 100) || 0;
+
+        if (this.duration) {
+          this.width = this.gantt.options.column_width * this.duration;
+          this.progress_width =
+              this.gantt.options.column_width *
+                  this.duration *
+                  (this.task.progress / 100) || 0;
+        } else {
+          const default_width = this.gantt.options.column_width / 10;
+
+          this.width = default_width;
+          this.progress_width = default_width;
+        }
+
         this.group = createSVG('g', {
             class: 'bar-wrapper ' + (this.task.custom_class || ''),
             'data-id': this.task.id
@@ -324,6 +333,10 @@ export default class Bar {
             const diff = date_utils.diff(task_start, gantt_start, 'day');
             x = diff * column_width / 30;
         } else if (this.gantt.view_is('Whole Day')) {
+          x += column_width;
+        } else if (this.gantt.view_is('Quarter Day')) {
+          x += column_width * 2;
+        } else if (this.gantt.view_is('Half Day')) {
           x += column_width;
         }
 

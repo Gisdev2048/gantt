@@ -3,7 +3,7 @@ $bar-stroke: #8D99A6 !default;
 $border-color: #e0e0e0 !default;
 $light-bg: #f5f5f5 !default;
 $light-border-color: #ebeff2 !default;
-$light-yellow: #fcf8e3 !default;
+$highlight-color: #ddf0ff !default;
 $text-muted: #666 !default;
 $text-light: #aaa !default;
 $text-color: #333 !default;
@@ -36,7 +36,7 @@ $handle-color: #ddd !default;
         }
     }
     .today-highlight {
-        fill: $light-yellow;
+        fill: $highlight-color;
         opacity: 0.5;
     }
 
