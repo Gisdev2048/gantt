@@ -42,10 +42,13 @@ export default class Bar {
             class: 'bar-group',
             append_to: this.group
         });
-        this.handle_group = createSVG('g', {
-            class: 'handle-group',
-            append_to: this.group
-        });
+
+        if (this.gantt.options.editable) {
+            this.handle_group = createSVG('g', {
+                class: 'handle-group',
+                append_to: this.group
+            });
+        }
     }
 
     prepare_helpers() {
@@ -70,7 +73,10 @@ export default class Bar {
         this.draw_bar();
         this.draw_progress_bar();
         this.draw_label();
-        this.draw_resize_handles();
+
+        if (this.gantt.options.editable) {
+            this.draw_resize_handles();
+        }
     }
 
     draw_bar() {
@@ -186,7 +192,7 @@ export default class Bar {
             this.group.classList.add('active');
         });
 
-        $.on(this.group, 'dblclick', e => {
+        $.on(this.group, this.gantt.options.click_trigger, e => {
             if (this.action_completed) {
                 // just finished a move action, wait for a few seconds
                 return;
@@ -199,13 +205,20 @@ export default class Bar {
     show_popup() {
         if (this.gantt.bar_being_dragged) return;
 
-        const start_date = date_utils.format(this.task._start, 'MMM D', this.gantt.options.language);
-        const end_date = date_utils.format(
-            date_utils.add(this.task._end, -1, 'second'),
-            'MMM D',
-            this.gantt.options.language
-        );
-        const subtitle = start_date + ' - ' + end_date;
+        let subtitle;
+
+        if (this.gantt.options.popup_subtitle) {
+          subtitle = this.gantt.options.popup_subtitle(this.task);
+        } else {
+          const start_date = date_utils.format(this.task._start, 'MMM D', this.gantt.options.language);
+          const end_date = date_utils.format(
+              date_utils.add(this.task._end, -1, 'second'),
+              'MMM D',
+              this.gantt.options.language
+          );
+
+          subtitle = start_date + ' - ' + end_date;
+        }
 
         this.gantt.show_popup({
             target_element: this.$bar,
@@ -310,7 +323,10 @@ export default class Bar {
         if (this.gantt.view_is('Month')) {
             const diff = date_utils.diff(task_start, gantt_start, 'day');
             x = diff * column_width / 30;
+        } else if (this.gantt.view_is('Whole Day')) {
+          x += column_width;
         }
+
         return x;
     }
 
