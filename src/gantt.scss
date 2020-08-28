@@ -145,15 +145,16 @@ $handle-color: #ddd !default;
         opacity: 0;
         background: rgba(0, 0, 0, 0.8);
         padding: 8px;
-        color: #959da5;
+        color: #fff;
         border-radius: 3px;
+        white-space: nowrap;
 
         .title {
+            color: #959da5;
             margin-bottom: 8px;
         }
 
         .subtitle {
-            color: #dfe2e5;
             white-space: nowrap;
         }
 

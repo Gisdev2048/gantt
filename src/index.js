@@ -88,7 +88,6 @@ export default class Gantt {
             date_format: 'YYYY-MM-DD',
             click_trigger: 'dblclick',
             popup_trigger: 'click',
-            popup_subtitle: null,
             custom_popup_html: null,
             language: 'en'
         };
